@@ -4,28 +4,40 @@ html {
 }
 
 body {
-    margin: 0;
+    display: flex;
+    justify-content: center;
 }
 
 #main {
-    margin-top: 150px;
+    margin-top: 70px;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    height: 450px;
-    width: 400px;
-    background-color: black;
+    background-color: rgb(75, 74, 74);
+    padding: 20px;
+    border-radius: 5px;
 }
 
 #display {
     display: flex;
-    width: 299px;
-    background-color: aquamarine;
+    width: 240px;
+    background-color: rgb(217, 217, 223);
     font-family: 'Courier New', Courier, monospace;
-    justify-content: center;
+    justify-content: flex-end;
     align-items: center;
     margin-bottom: 5px;
+    padding: 10px 5px 10px 0px;
+    border-radius: 3px;
+    font-size: 50px;
+}
+
+button {
+    padding: 20px;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 30px;
+    border: none;
+    border-radius: 3px;
 }
 
 #button-container {
@@ -36,16 +48,8 @@ body {
     gap: 5px;
 }
 
-button {
-    padding: 20px;
-    font-family: 'Courier New', Courier, monospace;
-    font-size: 30px;
-    border: none;
-    border-radius: 2px;
-}
-
 #num-0 {
-    width: 120px;
+    width: 121px;
 }
 
 #c {
@@ -61,6 +65,10 @@ button {
     padding-left: 11px;
     padding-right: 11px;
     background-color: rgb(248, 88, 88);
+}
+
+#ans {
+    background-color: rgb(129, 250, 170);
 }
 
 .opn {
