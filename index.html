@@ -4,21 +4,21 @@
         <meta charset="UTF-8">
         <link rel="stylesheet" href="style.css">
         <title>Calculator</title>
+        <script src="script.js" defer></script>
     </head>
 
     <body>
-        <script src="script.js" defer></script>
         <div id="main">
             <div id="display">
-                <div id="previous">up</div>
-                <div id="current">down</div>
+                <div class="display" id="previous"></div>
+                <div class="display" id="current"></div>
             </div>
 
             <div id="button-container">
                 <div class="row1">
-                    <button class="opn" id="ac">AC</button>
-                    <button class="opn" id="c">C</button>
-                    <button class="opn" id="op-int">-/+</button>
+                    <button id="ac">AC</button>
+                    <button id="c">C</button>
+                    <button id="op-int">-/+</button>
                     <button class="opn" id="x">x</button>
                 </div>
 
@@ -46,7 +46,7 @@
                 <div class="row5">
                     <button class="num" id="num-0">0</button>
                     <button class="num" id="dec">.</button>
-                    <button class="num" id="ans">=</button>
+                    <button id="ans">=</button>
                 </div>
             </div>
         </div>
