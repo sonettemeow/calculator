@@ -1,46 +1,62 @@
 const numberBtns = document.querySelectorAll('.num');
 const operationBtns = document.querySelectorAll('.opn');
+const decimalPoint = document.getElementById('dec');
+const equalsBtn = document.getElementById('ans');
 const clearAll = document.getElementById('ac');
 const delNum = document.getElementById('c');
 const reverse = document.getElementById('op-int');
 let previousValue = document.getElementById('previous');
 let currentValue = document.getElementById('current');
 
-//previousValue.innerHTML = 'EWAN KO NA';
-//currentValue.innerHTML = 'HAYSSS';
-
-//currentValue = '';
-
-function operate(currentValue, previousValue, operator) {
+function operate(previous, current, operator) {
     switch (operator) {
         case '+':
-            computation = previousValue + currentValue;
+            return previous + current;
             break;
         case '-':
-            computation = previousValue - currentValue;
+            return previous - current;
             break;
-        case 'x':
-            computation = previousValue * currentValue;
+        case '*':
+            return previous * current;
             break;
         case '÷':
-            computation = previousValue / currentValue;
+            return previous / current;
             break;
         default: 
             return;
     }
-    return computation;
+    
+}
+
+////////////
+
+function buildEquation(element) {
+    
 }
 
 numberBtns.forEach(button => button.addEventListener('click', () => {
-    let currentDisplay = currentValue.innerHTML.toString() + button.innerHTML;
-    currentValue.innerHTML = currentDisplay;
+    if (button.innerHTML === '.' && currentValue.innerHTML.includes('.')) {
+        return;
+    }
+    currentValue.innerHTML = currentValue.innerHTML.toString() + button.innerHTML.toString();
 }))
 
 operationBtns.forEach(button => button.addEventListener('click', () => {
-    let previousDisplay = currentValue.innerHTML.toString() + button.innerHTML;
-    previousValue.innerHTML = previousDisplay;
+    previousValue.innerHTML = currentValue.innerHTML.toString() + button.innerHTML;
     currentValue.innerHTML = '';
 }))
+
+equalsBtn.addEventListener('click', () => {
+    let previous = parseFloat(previousValue.innerHTML.slice(0,-1));
+    let current = parseFloat(currentValue.innerHTML);
+    let operation = previousValue.innerHTML.slice(-1);
+    console.log('previous: ' + previous + ' ' + typeof(previous));
+    console.log('current: ' + current + ' ' + typeof(current));
+    console.log('operation: ' + operation);
+    console.log(operate(previous, current, operation));
+
+    currentValue.innerHTML = operate(previous, current, operation);
+})
 
 clearAll.addEventListener('click', () => {
     current = '';
@@ -50,6 +66,10 @@ clearAll.addEventListener('click', () => {
 })
 
 delNum.addEventListener('click', button => {
-    currentDisplayDelete = currentValue.innerHTML.slice(0, -1);
+    if (previousValue.innerHTML !== '' && currentValue.innerHTML === '') {
+        currentValue.innerHTML = previousValue.innerHTML;
+        previousValue.innerHTML = '';
+    }
+    let currentDisplayDelete = currentValue.innerHTML.slice(0, -1);
     currentValue.innerHTML = currentDisplayDelete;
 })
