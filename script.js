@@ -1,12 +1,15 @@
 const numberBtns = document.querySelectorAll('.num');
 const operationBtns = document.querySelectorAll('.opn');
-const decimalPoint = document.getElementById('dec');
 const equalsBtn = document.getElementById('ans');
 const clearAll = document.getElementById('ac');
 const delNum = document.getElementById('c');
 const reverse = document.getElementById('op-int');
 let previousValue = document.getElementById('previous');
 let currentValue = document.getElementById('current');
+
+
+// FIX OVERFLOW AND DECIMAL PTS
+
 
 function operate(previous, current, operator) {
     switch (operator) {
@@ -28,34 +31,43 @@ function operate(previous, current, operator) {
     
 }
 
-////////////
-
-function buildEquation(element) {
-    
+function buildEquation() {
+    let previous = parseFloat(previousValue.innerHTML.slice(0,-1));
+    let current = parseFloat(currentValue.innerHTML);
+    let operation = previousValue.innerHTML.slice(-1);
+    return operate(previous, current, operation);
 }
 
 numberBtns.forEach(button => button.addEventListener('click', () => {
     if (button.innerHTML === '.' && currentValue.innerHTML.includes('.')) {
         return;
     }
-    currentValue.innerHTML = currentValue.innerHTML.toString() + button.innerHTML.toString();
+    if (currentValue.innerHTML > 999999999) {
+        return;
+    }
+    currentValue.innerHTML = currentValue.innerHTML + button.innerHTML;
 }))
 
 operationBtns.forEach(button => button.addEventListener('click', () => {
-    previousValue.innerHTML = currentValue.innerHTML.toString() + button.innerHTML;
-    currentValue.innerHTML = '';
+    if (previousValue.innerHTML === '' && currentValue.innerHTML === '') {
+        return;
+    }
+    if (previousValue.innerHTML !== '') {
+        previousValue.innerHTML = buildEquation().toString() + button.innerHTML.toString();
+        currentValue.innerHTML = '';
+    } else if (previousValue.innerHTML === '') {
+        previousValue.innerHTML = currentValue.innerHTML + button.innerHTML;
+        currentValue.innerHTML = '';
+    }
 }))
 
 equalsBtn.addEventListener('click', () => {
-    let previous = parseFloat(previousValue.innerHTML.slice(0,-1));
-    let current = parseFloat(currentValue.innerHTML);
-    let operation = previousValue.innerHTML.slice(-1);
-    console.log('previous: ' + previous + ' ' + typeof(previous));
-    console.log('current: ' + current + ' ' + typeof(current));
-    console.log('operation: ' + operation);
-    console.log(operate(previous, current, operation));
-
-    currentValue.innerHTML = operate(previous, current, operation);
+    if(currentValue.innerHTML === '' && previousValue.innerHTML === '') {
+        return;
+    }
+    currentValue.innerHTML = buildEquation();
+    previousValue.innerHTML = '';
+    //previousValue.innerHTML = previousValue.innerHTML.toString() + currentValue.innerHTML;  
 })
 
 clearAll.addEventListener('click', () => {

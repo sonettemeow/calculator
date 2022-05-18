@@ -20,7 +20,7 @@ body {
     border-radius: 5px;
 }
 
-#display {
+#display-container {
     display: flex;
     flex-direction: column;
     justify-content: space-around;
@@ -94,6 +94,11 @@ button:hover {
 
 #num-0 {
     flex: auto;
+}
+
+#dec {
+    padding-left: 19px;
+    padding-right: 19px;
 }
 
 #op-int {
