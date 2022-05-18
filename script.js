@@ -9,34 +9,47 @@ let currentValue = document.getElementById('current');
 //previousValue.innerHTML = 'EWAN KO NA';
 //currentValue.innerHTML = 'HAYSSS';
 
-currentValue = '';
-function append(number) {
-    currentValue = currentValue.toString() + number.toString();
-}
+//currentValue = '';
 
-function update() {
-    currentValue.innerHTML = currentValue;
-    console.log('Are ang current balyu: ' + currentValue);
+function operate(currentValue, previousValue, operator) {
+    switch (operator) {
+        case '+':
+            computation = previousValue + currentValue;
+            break;
+        case '-':
+            computation = previousValue - currentValue;
+            break;
+        case 'x':
+            computation = previousValue * currentValue;
+            break;
+        case '÷':
+            computation = previousValue / currentValue;
+            break;
+        default: 
+            return;
+    }
+    return computation;
 }
 
 numberBtns.forEach(button => button.addEventListener('click', () => {
-    append(button.innerText);
-    update();
+    let currentDisplay = currentValue.innerHTML.toString() + button.innerHTML;
+    currentValue.innerHTML = currentDisplay;
 }))
 
 operationBtns.forEach(button => button.addEventListener('click', () => {
-    previousValue.innerHTML = button.innerText;
+    let previousDisplay = currentValue.innerHTML.toString() + button.innerHTML;
+    previousValue.innerHTML = previousDisplay;
+    currentValue.innerHTML = '';
 }))
 
 clearAll.addEventListener('click', () => {
-    previousValue = '';
-    currentValue = '';
+    current = '';
+    previous = '';
+    currentValue.innerHTML = '';
+    previousValue.innerHTML = '';
 })
 
-reverse.addEventListener('click', () => {
-    if (Math.sign(currentValue) === 1) {
-        currentValue * -1;
-    } else if (Math.sign(currentValue) === -1) {
-        currentValue * -1;
-    }
+delNum.addEventListener('click', button => {
+    currentDisplayDelete = currentValue.innerHTML.slice(0, -1);
+    currentValue.innerHTML = currentDisplayDelete;
 })
