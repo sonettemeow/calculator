@@ -7,7 +7,7 @@ const changeSignBtn = document.getElementById('op-int');
 let previousValue = document.getElementById('previous');
 let currentValue = document.getElementById('current');
 
-// KEYBOARD SUPPORT
+// TO DO: KEYBOARD SUPPORT
 
 function operate(previous, current, operator) {
     let answer = 0;
@@ -60,7 +60,7 @@ function operate(previous, current, operator) {
     } else if (beforeDecimal === 1 && afterDecimal > 8) {
         return answer.toFixed(8);
     }
-    return answer;
+    return answer.toString();
 }
 
 function buildEquation() {
@@ -71,6 +71,9 @@ function buildEquation() {
 }
 
 numberBtns.forEach(button => button.addEventListener('click', () => {
+    if (button.innerHTML.includes('.')) {
+        currentValue.innerHTML = currentValue.innerHTML + button.innerHTML;
+    }
     if (button.innerHTML === '.' && currentValue.innerHTML.includes('.')) {
         return;
     }
@@ -80,7 +83,11 @@ numberBtns.forEach(button => button.addEventListener('click', () => {
     if (currentValue.innerHTML.includes('.') && currentValue.innerHTML.length > 9) {
         return;
     }
-    currentValue.innerHTML = currentValue.innerHTML + button.innerHTML;
+    currentValue.innerHTML = currentValue.innerHTML.replace(/^0+/, '') + button.innerHTML;
+    if (currentValue.innerHTML[0] === '.') {
+        currentValue.innerHTML = '0' + currentValue.innerHTML;
+    }
+    //currentValue.innerHTML = currentValue.innerHTML + button.innerHTML;
 }))
 
 operationBtns.forEach(button => button.addEventListener('click', () => {
@@ -111,8 +118,6 @@ equalsBtn.addEventListener('click', () => {
 })
 
 clearAll.addEventListener('click', () => {
-    current = '';
-    previous = '';
     currentValue.innerHTML = '';
     previousValue.innerHTML = '';
 })
