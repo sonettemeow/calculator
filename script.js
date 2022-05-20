@@ -2,8 +2,8 @@ const numberBtns = document.querySelectorAll('.num');
 const operationBtns = document.querySelectorAll('.opn');
 const equalsBtn = document.getElementById('ans');
 const clearAll = document.getElementById('ac');
-const delNum = document.getElementById('c');
-const reverse = document.getElementById('op-int');
+const deleteBtn = document.getElementById('c');
+const changeSignBtn = document.getElementById('op-int');
 let previousValue = document.getElementById('previous');
 let currentValue = document.getElementById('current');
 
@@ -33,7 +33,7 @@ function operate(previous, current, operator) {
     } else if (Number.isInteger(answer) && answer.toString().length >= 10) {
         return answer.toExponential(2);
     }
-    
+
     let beforeDecimal = answer.toString().split('.')[0].length;
     let afterDecimal = answer.toString().split('.')[1].length;
 
@@ -97,12 +97,17 @@ operationBtns.forEach(button => button.addEventListener('click', () => {
 }))
 
 equalsBtn.addEventListener('click', () => {
+    if (currentValue.innerHTML !== '' && previousValue.innerHTML === '') {
+        return;
+    }
     if(currentValue.innerHTML === '' && previousValue.innerHTML === '') {
+        return;
+    }
+    if(currentValue.innerHTML === '' && previousValue.innerHTML !== '') {
         return;
     }
     currentValue.innerHTML = buildEquation();
     previousValue.innerHTML = '';
-    //previousValue.innerHTML = previousValue.innerHTML.toString() + currentValue.innerHTML;  
 })
 
 clearAll.addEventListener('click', () => {
@@ -112,11 +117,22 @@ clearAll.addEventListener('click', () => {
     previousValue.innerHTML = '';
 })
 
-delNum.addEventListener('click', button => {
+deleteBtn.addEventListener('click', () => {
     if (previousValue.innerHTML !== '' && currentValue.innerHTML === '') {
         currentValue.innerHTML = previousValue.innerHTML;
         previousValue.innerHTML = '';
     }
     let currentDisplayDelete = currentValue.innerHTML.slice(0, -1);
     currentValue.innerHTML = currentDisplayDelete;
+})
+
+changeSignBtn.addEventListener('click', () => {
+    if (currentValue.innerHTML === '') {
+        currentValue.innerHTML = currentValue.innerHTML + '-';
+    } else if (currentValue.innerHTML === '-') {
+        currentValue.innerHTML = '';
+    } else {
+        let integer = parseFloat(currentValue.innerHTML) * -1;
+        currentValue.innerHTML = integer.toString();
+    }
 })
