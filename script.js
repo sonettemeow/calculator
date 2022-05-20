@@ -7,28 +7,60 @@ const reverse = document.getElementById('op-int');
 let previousValue = document.getElementById('previous');
 let currentValue = document.getElementById('current');
 
-
-// FIX OVERFLOW AND DECIMAL PTS
-
+// KEYBOARD SUPPORT
 
 function operate(previous, current, operator) {
+    let answer = 0;
     switch (operator) {
         case '+':
-            return previous + current;
+            answer =  previous + current;
             break;
         case '-':
-            return previous - current;
+            answer =  previous - current;
             break;
         case '*':
-            return previous * current;
+            answer =  previous * current;
             break;
         case '÷':
-            return previous / current;
+            answer =  previous / current;
             break;
         default: 
             return;
     }
+
+    if (Number.isInteger(answer) && answer.toString().length < 10) {
+        return answer;
+    } else if (Number.isInteger(answer) && answer.toString().length >= 10) {
+        return answer.toExponential(2);
+    }
     
+    let beforeDecimal = answer.toString().split('.')[0].length;
+    let afterDecimal = answer.toString().split('.')[1].length;
+
+    if (beforeDecimal > 9) {
+        return answer.toExponential(2);
+    } else if (beforeDecimal === 9) {
+        return Math.trunc(answer);
+    } else if (beforeDecimal === 8 && afterDecimal > 1) {
+        return answer.toFixed(1);
+    } else if (beforeDecimal === 7 && afterDecimal > 2) {
+        return answer.toFixed(2);
+    } else if (beforeDecimal === 6 && afterDecimal > 3) {
+        return answer.toFixed(3);
+    } else if (beforeDecimal === 5 && afterDecimal > 4) {
+        return answer.toFixed(4);
+    } else if (beforeDecimal === 4 && afterDecimal > 5) {
+        return answer.toFixed(5);
+    } else if (beforeDecimal === 3 && afterDecimal > 6) {
+        return answer.toFixed(6);
+    } else if (beforeDecimal === 2 && afterDecimal > 7) {
+        return answer.toFixed(7);
+    } else if (beforeDecimal === 2 && afterDecimal > 7) {
+        return answer.toFixed(7);
+    } else if (beforeDecimal === 1 && afterDecimal > 8) {
+        return answer.toFixed(8);
+    }
+    return answer;
 }
 
 function buildEquation() {
@@ -42,7 +74,10 @@ numberBtns.forEach(button => button.addEventListener('click', () => {
     if (button.innerHTML === '.' && currentValue.innerHTML.includes('.')) {
         return;
     }
-    if (currentValue.innerHTML > 999999999) {
+    if (currentValue.innerHTML.includes('.') === false && currentValue.innerHTML.length === 9) {
+        return;
+    }
+    if (currentValue.innerHTML.includes('.') && currentValue.innerHTML.length > 9) {
         return;
     }
     currentValue.innerHTML = currentValue.innerHTML + button.innerHTML;
