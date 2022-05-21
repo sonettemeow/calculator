@@ -6,6 +6,8 @@ const deleteBtn = document.getElementById('c');
 const changeSignBtn = document.getElementById('op-int');
 let previousValue = document.getElementById('previous');
 let currentValue = document.getElementById('current');
+currentValue.setAttribute('tabindex', 0);
+previousValue.setAttribute('tabindex', 0);
 
 // TO DO: KEYBOARD SUPPORT
 
@@ -71,9 +73,6 @@ function buildEquation() {
 }
 
 numberBtns.forEach(button => button.addEventListener('click', (e) => {
-    if (button.innerHTML.includes('.')) {
-        currentValue.innerHTML = currentValue.innerHTML + button.innerHTML;
-    }
     if (button.innerHTML === '.' && currentValue.innerHTML.includes('.')) {
         return;
     }
@@ -140,4 +139,10 @@ changeSignBtn.addEventListener('click', (e) => {
         let integer = parseFloat(currentValue.innerHTML) * -1;
         currentValue.innerHTML = integer.toString();
     }
+})
+
+document.getElementById('current').addEventListener('keydown', (e) => {
+    currentValue.innerHTML = '2';
+    console.log('pew');
+    console.log(e);
 })
