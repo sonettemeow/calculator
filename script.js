@@ -70,7 +70,7 @@ function buildEquation() {
     return operate(previous, current, operation);
 }
 
-numberBtns.forEach(button => button.addEventListener('click', () => {
+numberBtns.forEach(button => button.addEventListener('click', (e) => {
     if (button.innerHTML.includes('.')) {
         currentValue.innerHTML = currentValue.innerHTML + button.innerHTML;
     }
@@ -90,7 +90,7 @@ numberBtns.forEach(button => button.addEventListener('click', () => {
     //currentValue.innerHTML = currentValue.innerHTML + button.innerHTML;
 }))
 
-operationBtns.forEach(button => button.addEventListener('click', () => {
+operationBtns.forEach(button => button.addEventListener('click', (e) => {
     if (previousValue.innerHTML === '' && currentValue.innerHTML === '') {
         return;
     }
@@ -103,7 +103,7 @@ operationBtns.forEach(button => button.addEventListener('click', () => {
     }
 }))
 
-equalsBtn.addEventListener('click', () => {
+equalsBtn.addEventListener('click', (e) => {
     if (currentValue.innerHTML !== '' && previousValue.innerHTML === '') {
         return;
     }
@@ -117,12 +117,12 @@ equalsBtn.addEventListener('click', () => {
     previousValue.innerHTML = '';
 })
 
-clearAll.addEventListener('click', () => {
+clearAll.addEventListener('click', (e) => {
     currentValue.innerHTML = '';
     previousValue.innerHTML = '';
 })
 
-deleteBtn.addEventListener('click', () => {
+deleteBtn.addEventListener('click', (e) => {
     if (previousValue.innerHTML !== '' && currentValue.innerHTML === '') {
         currentValue.innerHTML = previousValue.innerHTML;
         previousValue.innerHTML = '';
@@ -131,7 +131,7 @@ deleteBtn.addEventListener('click', () => {
     currentValue.innerHTML = currentDisplayDelete;
 })
 
-changeSignBtn.addEventListener('click', () => {
+changeSignBtn.addEventListener('click', (e) => {
     if (currentValue.innerHTML === '') {
         currentValue.innerHTML = currentValue.innerHTML + '-';
     } else if (currentValue.innerHTML === '-') {
