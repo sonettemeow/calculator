@@ -2,13 +2,19 @@ const numberBtns = document.querySelectorAll('.num');
 const operationBtns = document.querySelectorAll('.opn');
 const equalsBtn = document.getElementById('ans');
 const clearAll = document.getElementById('ac');
-const deleteBtn = document.getElementById('c');
+const deleteBtn = document.getElementById('delete');
 const changeSignBtn = document.getElementById('op-int');
 let previousValue = document.getElementById('previous');
 let currentValue = document.getElementById('current');
 currentValue.setAttribute('tabindex', 0);
 previousValue.setAttribute('tabindex', 0);
 
+numberBtns.tabIndex = -1;;
+operationBtns.tabIndex = -1;
+equalsBtn.tabIndex = -1;
+clearAll.tabIndex = -1;
+deleteBtn.tabIndex = -1;
+changeSignBtn.tabIndex = -1;
 // TO DO: KEYBOARD SUPPORT
 
 function operate(previous, current, operator) {
@@ -141,8 +147,23 @@ changeSignBtn.addEventListener('click', (e) => {
     }
 })
 
-document.getElementById('current').addEventListener('keydown', (e) => {
-    currentValue.innerHTML = '2';
-    console.log('pew');
-    console.log(e);
-})
+//////////////////////
+
+function keyboardInput() {
+    currentValue.addEventListener('keydown', (key) => {
+        key.preventDefault();
+        if (key.code === 'Tab') {
+            key.preventDefault();
+            console.log('Not Tab');
+            return false;
+        }
+        currentValue.innerHTML = currentValue.innerHTML + key.key;
+        console.log(key);
+    })
+}
+
+window.onload = function () {
+    document.onkeydown = keyboardInput();
+
+    //document.onkeydown = backspace();
+}
