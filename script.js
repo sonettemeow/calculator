@@ -6,8 +6,6 @@ const deleteBtn = document.getElementById('delete');
 const changeSignBtn = document.getElementById('op-int');
 let previousValue = document.getElementById('previous');
 let currentValue = document.getElementById('current');
-currentValue.setAttribute('tabindex', 0);
-previousValue.setAttribute('tabindex', 0);
 
 numberBtns.tabIndex = -1;;
 operationBtns.tabIndex = -1;
@@ -15,6 +13,7 @@ equalsBtn.tabIndex = -1;
 clearAll.tabIndex = -1;
 deleteBtn.tabIndex = -1;
 changeSignBtn.tabIndex = -1;
+
 // TO DO: KEYBOARD SUPPORT
 
 function operate(previous, current, operator) {
@@ -151,10 +150,8 @@ changeSignBtn.addEventListener('click', (e) => {
 
 function keyboardInput() {
     currentValue.addEventListener('keydown', (key) => {
-        key.preventDefault();
         if (key.code === 'Tab') {
             key.preventDefault();
-            console.log('Not Tab');
             return false;
         }
         currentValue.innerHTML = currentValue.innerHTML + key.key;
