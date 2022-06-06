@@ -65,7 +65,7 @@ function operate(previous, current, operator) {
     } else if (beforeDecimal === 1 && afterDecimal > 8) {
         return answer.toFixed(8);
     }
-    return answer.toString();
+    return parseFloat(answer).toString();
 }
 
 function buildEquation() {
@@ -209,6 +209,7 @@ function keyboardInput(e) {
         } else if (previousValue.innerHTML === '' && currentValue.innerHTML !== '') {
             appendOperation(e.key);
         }
+        appendOperation(e.key);
     }
 
     if (e.key === '=' || e.key === 'Enter') {
