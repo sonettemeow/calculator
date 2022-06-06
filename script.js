@@ -7,14 +7,13 @@ const changeSignBtn = document.getElementById('op-int');
 let previousValue = document.getElementById('previous');
 let currentValue = document.getElementById('current');
 
-numberBtns.tabIndex = -1;;
-operationBtns.tabIndex = -1;
-equalsBtn.tabIndex = -1;
-clearAll.tabIndex = -1;
-deleteBtn.tabIndex = -1;
-changeSignBtn.tabIndex = -1;
+function blurButtons() {
+    document.getElementById('ans').blur();
+    document.getElementById('ac').blur();
+    document.getElementById('delete').blur();
+    document.getElementById('op-int').blur();
+}
 
-// TO DO: KEYBOARD SUPPORT
 
 function operate(previous, current, operator) {
     let answer = 0;
@@ -78,6 +77,7 @@ function buildEquation() {
 }
 
 numberBtns.forEach(button => button.addEventListener('click', (e) => {
+    blurButtons();
     if (button.innerHTML === '.' && currentValue.innerHTML.includes('.')) {
         return;
     }
@@ -95,6 +95,7 @@ numberBtns.forEach(button => button.addEventListener('click', (e) => {
 }))
 
 operationBtns.forEach(button => button.addEventListener('click', (e) => {
+    blurButtons();
     if (previousValue.innerHTML === '' && currentValue.innerHTML === '') {
         return;
     }
@@ -108,6 +109,7 @@ operationBtns.forEach(button => button.addEventListener('click', (e) => {
 }))
 
 equalsBtn.addEventListener('click', (e) => {
+    blurButtons();
     if (currentValue.innerHTML !== '' && previousValue.innerHTML === '') {
         return;
     }
@@ -122,11 +124,13 @@ equalsBtn.addEventListener('click', (e) => {
 })
 
 clearAll.addEventListener('click', (e) => {
+    blurButtons();
     currentValue.innerHTML = '';
     previousValue.innerHTML = '';
 })
 
 deleteBtn.addEventListener('click', (e) => {
+    blurButtons();
     if (previousValue.innerHTML !== '' && currentValue.innerHTML === '') {
         currentValue.innerHTML = previousValue.innerHTML;
         previousValue.innerHTML = '';
@@ -136,6 +140,7 @@ deleteBtn.addEventListener('click', (e) => {
 })
 
 changeSignBtn.addEventListener('click', (e) => {
+    blurButtons();
     if (currentValue.innerHTML === '') {
         currentValue.innerHTML = currentValue.innerHTML + '-';
     } else if (currentValue.innerHTML === '-') {
@@ -146,21 +151,66 @@ changeSignBtn.addEventListener('click', (e) => {
     }
 })
 
-//////////////////////
+// Keyboard Support
 
-function keyboardInput() {
-    currentValue.addEventListener('keydown', (key) => {
-        if (key.code === 'Tab') {
-            key.preventDefault();
-            return false;
+window.addEventListener('keydown', keyboardInput);
+
+function keyboardInput(e) {
+
+    if ((e.key >= 0 && e.key <=9) || e.key === '.') {
+        if (e.key === '.' && currentValue.innerHTML.includes('.')) {
+            return;
         }
-        currentValue.innerHTML = currentValue.innerHTML + key.key;
-        console.log(key);
-    })
-}
+        if (currentValue.innerHTML.includes('.') === false && currentValue.innerHTML.length === 9) {
+            return;
+        }
+        if (currentValue.innerHTML.includes('.') && currentValue.innerHTML.length > 9) {
+            return;
+        }
+        currentValue.innerHTML = currentValue.innerHTML.replace(/^0+/, '') + e.key;
+        if (currentValue.innerHTML[0] === '.') {
+            currentValue.innerHTML = '0' + currentValue.innerHTML;
+        }
+    }
 
-window.onload = function () {
-    document.onkeydown = keyboardInput();
+    if (e.key === '+' || e.key === '-' || e.key === '*' || e.key === '/') {
+        if (previousValue.innerHTML === '' && currentValue.innerHTML === '') {
+            return;
+        }
+        if (previousValue.innerHTML !== '') {
+            previousValue.innerHTML = buildEquation().toString() + e.key.toString();
+            currentValue.innerHTML = '';
+        } else if (previousValue.innerHTML === '') {
+            previousValue.innerHTML = currentValue.innerHTML + e.key;
+            currentValue.innerHTML = '';
+        }
+    }
 
-    //document.onkeydown = backspace();
+    if (e.key === '=' || e.key === 'Enter') {
+        if (currentValue.innerHTML !== '' && previousValue.innerHTML === '') {
+            return;
+        }
+        if(currentValue.innerHTML === '' && previousValue.innerHTML === '') {
+            return;
+        }
+        if(currentValue.innerHTML === '' && previousValue.innerHTML !== '') {
+            return;
+        }
+        currentValue.innerHTML = buildEquation();
+        previousValue.innerHTML = '';
+    }
+
+    if (e.key === 'Backspace') {
+        if (previousValue.innerHTML !== '' && currentValue.innerHTML === '') {
+            currentValue.innerHTML = previousValue.innerHTML;
+            previousValue.innerHTML = '';
+        }
+        let currentDisplayDelete = currentValue.innerHTML.slice(0, -1);
+        currentValue.innerHTML = currentDisplayDelete;
+    }
+
+    if (e.key === 'Escape') {
+        currentValue.innerHTML = '';
+        previousValue.innerHTML = '';
+    }
 }
