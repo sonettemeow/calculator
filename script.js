@@ -68,6 +68,13 @@ function operate(previous, current, operator) {
     return answer.toString();
 }
 
+function buildEquation() {
+    let previous = parseFloat(previousValue.innerHTML.slice(0,-1));
+    let current = parseFloat(currentValue.innerHTML);
+    let operation = previousValue.innerHTML.slice(-1);
+    return operate(previous, current, operation);
+}
+
 numberBtns.forEach(button => button.addEventListener('click', (e) => {
     appendNumber(button.innerHTML);
 }))
@@ -91,14 +98,6 @@ deleteBtn.addEventListener('click', (e) => {
 changeSignBtn.addEventListener('click', (e) => {
     changeSign();
 })
-
-
-function buildEquation() {
-    let previous = parseFloat(previousValue.innerHTML.slice(0,-1));
-    let current = parseFloat(currentValue.innerHTML);
-    let operation = previousValue.innerHTML.slice(-1);
-    return operate(previous, current, operation);
-}
 
 function appendNumber(button) {
     blurButtons();
@@ -184,8 +183,32 @@ function keyboardInput(e) {
         appendNumber(e.key);
     }
 
-    if (e.key === '+' || e.key === '-' || e.key === '*' || e.key === '/') {
+    if (e.key === '*') {
         appendOperation(e.key);
+    }
+
+    if (e.key === '/') {
+        appendOperation('÷');
+    }
+
+    if (e.key === '+') {
+        if (currentValue.innerHTML === '') {
+            return;
+        }
+        if (currentValue.innerHTML === '-') {
+            currentValue.innerHTML = '';
+        }
+        appendOperation(e.key);
+    }
+
+    if (e.key === '-') {
+        if (previousValue.innerHTML === '' && currentValue.innerHTML === '') {
+            currentValue.innerHTML = e.key;
+        } else if (currentValue.innerHTML === '-') {
+            return;
+        } else if (previousValue.innerHTML === '' && currentValue.innerHTML !== '') {
+            appendOperation(e.key);
+        }
     }
 
     if (e.key === '=' || e.key === 'Enter') {
@@ -200,6 +223,3 @@ function keyboardInput(e) {
         clearDisplay();
     }
 }
-
-//////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////
