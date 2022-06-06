@@ -14,7 +14,6 @@ function blurButtons() {
     document.getElementById('op-int').blur();
 }
 
-
 function operate(previous, current, operator) {
     let answer = 0;
     switch (operator) {
@@ -69,6 +68,31 @@ function operate(previous, current, operator) {
     return answer.toString();
 }
 
+numberBtns.forEach(button => button.addEventListener('click', (e) => {
+    appendNumber(button.innerHTML);
+}))
+
+operationBtns.forEach(button => button.addEventListener('click', (e) => {
+    appendOperation(button.innerHTML);
+}))
+
+equalsBtn.addEventListener('click', (e) => {
+    showAnswer();
+})
+
+clearAll.addEventListener('click', (e) => {
+    clearDisplay();
+})
+
+deleteBtn.addEventListener('click', (e) => {
+    deleteOne();
+})
+
+changeSignBtn.addEventListener('click', (e) => {
+    changeSign();
+})
+
+
 function buildEquation() {
     let previous = parseFloat(previousValue.innerHTML.slice(0,-1));
     let current = parseFloat(currentValue.innerHTML);
@@ -76,9 +100,9 @@ function buildEquation() {
     return operate(previous, current, operation);
 }
 
-numberBtns.forEach(button => button.addEventListener('click', (e) => {
+function appendNumber(button) {
     blurButtons();
-    if (button.innerHTML === '.' && currentValue.innerHTML.includes('.')) {
+    if (button === '.' && currentValue.innerHTML.includes('.')) {
         return;
     }
     if (currentValue.innerHTML.includes('.') === false && currentValue.innerHTML.length === 9) {
@@ -87,28 +111,27 @@ numberBtns.forEach(button => button.addEventListener('click', (e) => {
     if (currentValue.innerHTML.includes('.') && currentValue.innerHTML.length > 9) {
         return;
     }
-    currentValue.innerHTML = currentValue.innerHTML.replace(/^0+/, '') + button.innerHTML;
+    currentValue.innerHTML = currentValue.innerHTML.replace(/^0+/, '') + button;
     if (currentValue.innerHTML[0] === '.') {
         currentValue.innerHTML = '0' + currentValue.innerHTML;
     }
-    //currentValue.innerHTML = currentValue.innerHTML + button.innerHTML;
-}))
+}
 
-operationBtns.forEach(button => button.addEventListener('click', (e) => {
+function appendOperation(sign) {
     blurButtons();
     if (previousValue.innerHTML === '' && currentValue.innerHTML === '') {
         return;
     }
     if (previousValue.innerHTML !== '') {
-        previousValue.innerHTML = buildEquation().toString() + button.innerHTML.toString();
+        previousValue.innerHTML = buildEquation().toString() + sign.toString();
         currentValue.innerHTML = '';
     } else if (previousValue.innerHTML === '') {
-        previousValue.innerHTML = currentValue.innerHTML + button.innerHTML;
+        previousValue.innerHTML = currentValue.innerHTML + sign;
         currentValue.innerHTML = '';
     }
-}))
+}
 
-equalsBtn.addEventListener('click', (e) => {
+function showAnswer(e) {
     blurButtons();
     if (currentValue.innerHTML !== '' && previousValue.innerHTML === '') {
         return;
@@ -121,15 +144,15 @@ equalsBtn.addEventListener('click', (e) => {
     }
     currentValue.innerHTML = buildEquation();
     previousValue.innerHTML = '';
-})
+}
 
-clearAll.addEventListener('click', (e) => {
+function clearDisplay(e) {
     blurButtons();
     currentValue.innerHTML = '';
     previousValue.innerHTML = '';
-})
+}
 
-deleteBtn.addEventListener('click', (e) => {
+function deleteOne(e) {
     blurButtons();
     if (previousValue.innerHTML !== '' && currentValue.innerHTML === '') {
         currentValue.innerHTML = previousValue.innerHTML;
@@ -137,9 +160,9 @@ deleteBtn.addEventListener('click', (e) => {
     }
     let currentDisplayDelete = currentValue.innerHTML.slice(0, -1);
     currentValue.innerHTML = currentDisplayDelete;
-})
+}
 
-changeSignBtn.addEventListener('click', (e) => {
+function changeSign(e) {
     blurButtons();
     if (currentValue.innerHTML === '') {
         currentValue.innerHTML = currentValue.innerHTML + '-';
@@ -149,7 +172,7 @@ changeSignBtn.addEventListener('click', (e) => {
         let integer = parseFloat(currentValue.innerHTML) * -1;
         currentValue.innerHTML = integer.toString();
     }
-})
+}
 
 // Keyboard Support
 
@@ -158,59 +181,25 @@ window.addEventListener('keydown', keyboardInput);
 function keyboardInput(e) {
 
     if ((e.key >= 0 && e.key <=9) || e.key === '.') {
-        if (e.key === '.' && currentValue.innerHTML.includes('.')) {
-            return;
-        }
-        if (currentValue.innerHTML.includes('.') === false && currentValue.innerHTML.length === 9) {
-            return;
-        }
-        if (currentValue.innerHTML.includes('.') && currentValue.innerHTML.length > 9) {
-            return;
-        }
-        currentValue.innerHTML = currentValue.innerHTML.replace(/^0+/, '') + e.key;
-        if (currentValue.innerHTML[0] === '.') {
-            currentValue.innerHTML = '0' + currentValue.innerHTML;
-        }
+        appendNumber(e.key);
     }
 
     if (e.key === '+' || e.key === '-' || e.key === '*' || e.key === '/') {
-        if (previousValue.innerHTML === '' && currentValue.innerHTML === '') {
-            return;
-        }
-        if (previousValue.innerHTML !== '') {
-            previousValue.innerHTML = buildEquation().toString() + e.key.toString();
-            currentValue.innerHTML = '';
-        } else if (previousValue.innerHTML === '') {
-            previousValue.innerHTML = currentValue.innerHTML + e.key;
-            currentValue.innerHTML = '';
-        }
+        appendOperation(e.key);
     }
 
     if (e.key === '=' || e.key === 'Enter') {
-        if (currentValue.innerHTML !== '' && previousValue.innerHTML === '') {
-            return;
-        }
-        if(currentValue.innerHTML === '' && previousValue.innerHTML === '') {
-            return;
-        }
-        if(currentValue.innerHTML === '' && previousValue.innerHTML !== '') {
-            return;
-        }
-        currentValue.innerHTML = buildEquation();
-        previousValue.innerHTML = '';
+        showAnswer();
     }
 
     if (e.key === 'Backspace') {
-        if (previousValue.innerHTML !== '' && currentValue.innerHTML === '') {
-            currentValue.innerHTML = previousValue.innerHTML;
-            previousValue.innerHTML = '';
-        }
-        let currentDisplayDelete = currentValue.innerHTML.slice(0, -1);
-        currentValue.innerHTML = currentDisplayDelete;
+        deleteOne();
     }
 
     if (e.key === 'Escape') {
-        currentValue.innerHTML = '';
-        previousValue.innerHTML = '';
+        clearDisplay();
     }
 }
+
+//////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////
