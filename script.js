@@ -16,6 +16,10 @@ function blurButtons() {
 
 function operate(previous, current, operator) {
     let answer = 0;
+    if (current === 0 && operator === '÷') {
+        previousValue.innerHTML = '';
+        currentValue.innerHTML = 'undefined';
+    }
     switch (operator) {
         case '+':
             answer =  previous + current;
